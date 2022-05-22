@@ -2,6 +2,8 @@ import hashlib
 import random
 import urllib.parse
 from hashlib import md5
+from dotenv import load_dotenv
+import os
 
 import requests
 from flask import Flask, render_template, redirect, url_for, flash, abort, request
@@ -20,9 +22,10 @@ from sqlalchemy import Table, Column, Integer, ForeignKey, engine
 from sqlalchemy.ext.declarative import declarative_base
 
 
+load_dotenv()
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'something'
+app.config['SECRET_KEY'] = os.getenv('MY_SECRET_KEY')
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
@@ -315,8 +318,6 @@ def create_pic_request(email):
     hashed_email = md5(encoded_email)
     basic_image_request = f'https://www.gravatar.com/avatar/{hashed_email}?s=300&d={rand_option}'
     return basic_image_request
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
